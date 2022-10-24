@@ -2,6 +2,15 @@ const { TimeoutSettings } = require("puppeteer");
 
 let page;
 
+beforeEach(async () => {
+    page = await browser.newPage();
+    await page.goto("https://github.com/team");
+  });
+
+afterEach(() => {
+    page.close();
+});
+
 const fish = (async (url, selector) => {
   page = await browser.newPage();
   await page.goto(url);
@@ -12,15 +21,6 @@ const fish = (async (url, selector) => {
 });
 
 describe("Github page tests", () => {
-
-  beforeEach(async () => {
-    page = await browser.newPage();
-    await page.goto("https://github.com/team");
-  });
-
-  afterEach(() => {
-    page.close();
-  });
 
   test("The h1 header content'", async () => {
     const firstLink = await page.$("header div div a");
@@ -55,10 +55,6 @@ describe("Github page tests", () => {
 
 describe("Second task - add 3 new tests", () => {
 
-  afterEach(() => {
-    page.close();
-  });
-
   test("Check h1 on first page", async () => {
     expect(await fish("https://github.com/marketplace?type=actions", "h1")).toEqual("Actions");
   });
@@ -81,10 +77,6 @@ describe("Third task - Netology site with timeout", () => {
     page.setDefaultNavigationTimeout(0);
     page.setDefaultNavigationTimeout(90000);
     await page.goto("https://netology.ru/");    
-  });
-
-  afterAll(() => {
-    page.close();
   });
 
   test(`Check Title on first page`, async () => {    
